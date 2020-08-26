@@ -1,12 +1,7 @@
 package inaugural.soliloquy.logger.test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,18 +10,20 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import inaugural.soliloquy.logger.Logger;
-import soliloquy.logger.specs.ILogger;
+import inaugural.soliloquy.logger.LoggerImpl;
+import soliloquy.specs.logger.Logger;
 
-public class LoggerTests {
-	private ILogger _logger;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class LoggerImplTests {
+	private LoggerImpl _logger;
 	
 	private String _logFileLocation;
 	
 	@BeforeEach
 	protected void setUp() throws Exception {
 		_logFileLocation = "src/inaugural/soliloquy/logger/test/TestLogFile.txt";
-		_logger = new Logger();
+		_logger = new LoggerImpl();
 		_logger.setLogfileLocation(_logFileLocation);
 		Files.deleteIfExists(Paths.get(_logFileLocation));
 	}
@@ -48,15 +45,15 @@ public class LoggerTests {
 		try (Stream<String> stream = Files.lines(Paths.get(_logFileLocation))) {
 			stream.forEach(lines::add);
 		} catch (IOException e) {
-			assertTrue(false);
+			fail(e.getMessage());
 		}
 		
 		assertTrue(lines.size() > 0);
-		assertTrue(lines.get(0).equals("[ERROR] " + timestamp));
-		assertTrue(lines.get(1).equals("Stack Trace: "
+		assertEquals(lines.get(0), "[ERROR] " + timestamp);
+		assertEquals(lines.get(1), "Stack Trace: "
 				+ IllegalArgumentException.class.getCanonicalName()
 				+ ": "
-				+ exceptionMessage));
+				+ exceptionMessage);
 	}
 	
 	@Test
@@ -70,12 +67,12 @@ public class LoggerTests {
 		try (Stream<String> stream = Files.lines(Paths.get(_logFileLocation))) {
 			stream.forEach(lines::add);
 		} catch (IOException e) {
-			assertTrue(false);
+			fail(e.getMessage());
 		}
-		
-		assertTrue(lines.size() == 2);
-		assertTrue(lines.get(0).equals("[WARNING] " + timestamp + " : " + warningMessage));
-		assertTrue(lines.get(1).equals("========"));
+
+		assertEquals(2, lines.size());
+		assertEquals(lines.get(0), "[WARNING] " + timestamp + " : " + warningMessage);
+		assertEquals("========", lines.get(1));
 	}
 	
 	@Test
@@ -89,11 +86,11 @@ public class LoggerTests {
 		try (Stream<String> stream = Files.lines(Paths.get(_logFileLocation))) {
 			stream.forEach(lines::add);
 		} catch (IOException e) {
-			assertTrue(false);
+			fail(e.getMessage());
 		}
-		
-		assertTrue(lines.size() == 2);
-		assertTrue(lines.get(0).equals("[INFO] " + timestamp + " : " + infoMessage));
-		assertTrue(lines.get(1).equals("========"));
+
+		assertEquals(2, lines.size());
+		assertEquals(lines.get(0), "[INFO] " + timestamp + " : " + infoMessage);
+		assertEquals("========", lines.get(1));
 	}
 }

@@ -2,18 +2,18 @@ package inaugural.soliloquy.logger;
 
 import com.google.inject.AbstractModule;
 
-import soliloquy.logger.specs.ILogger;
+import soliloquy.specs.logger.Logger;
 
 public class LoggerModule extends AbstractModule {
-	private ILogger _logger;
+	private Logger _logger;
 	
 	public LoggerModule() {
-		_logger = new Logger();
+		_logger = new LoggerImpl();
 	}
 
 	@Override
 	protected void configure() {
-		bind(ILogger.class).toInstance(_logger);
+		bind(Logger.class).toInstance(_logger);
 	}
 
 }

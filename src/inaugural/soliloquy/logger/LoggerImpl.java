@@ -9,14 +9,13 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.MessageFormat;
 
-import soliloquy.logger.specs.ILogger;
-
-public class Logger implements ILogger {
+public class LoggerImpl implements soliloquy.specs.logger.Logger {
 	private File _file;
 
 	@Override
 	public void setLogfileLocation(String logLocation) throws IOException {
 		_file = new File(logLocation);
+		//noinspection ResultOfMethodCallIgnored
 		_file.createNewFile();
 	}
 
