@@ -8,3 +8,9 @@
 *.pom
 target/mvn-repo/disorg/soliloquy/inaugural.soliloquy.logger/maven-metadata.xml
 *.prefs
+.idea/inaugural.soliloquy.logger.iml
+.idea/libraries
+.idea/tasks.xml
+.idea/usage.statistics.xml
+.idea/workspace.xml
+.idea/shelf
